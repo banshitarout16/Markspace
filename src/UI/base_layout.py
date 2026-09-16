@@ -6,8 +6,14 @@ def style_background_home():
 
         <style>
         .stApp{ 
-        background: #142B6F !important; 
+        background: #5865F2 !important; 
         }
+        .stApp div[data-testid="stColumn"]{
+            background-color: #FFFFFF !important;
+            padding: 2.5rem !important;
+            border-radius: 5rem !important;
+            }
+
         </style>
         
         """ 
