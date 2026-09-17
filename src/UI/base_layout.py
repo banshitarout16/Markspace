@@ -36,6 +36,7 @@ def style_background_dashboard():
 
 # overriding base layout background
 def style_base_layout():
+
     st.markdown("""
 
         <style>
