@@ -72,6 +72,22 @@ def teacher_screen_login():
                    st.session_state['login_type']= None
                    st.rerun()
 
+    # DIVIDER
+    st.markdown("""
+        <div style="
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(
+                to right,
+                transparent 0%,
+                #a8a8a8 15%,
+                #a8a8a8 85%,
+                transparent 100%
+            );
+            margin: 5px 0 25px 0;
+        "></div>
+    """, unsafe_allow_html=True)
+
     st.header('login using password', text_alignment="center")
     st.space()
 
@@ -144,7 +160,21 @@ def teacher_screen_register():
             st.session_state['login_type']= None
             st.rerun()
         
-    
+        # DIVIDER
+    st.markdown("""
+        <div style="
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(
+                to right,
+                transparent 0%,
+                #a8a8a8 15%,
+                #a8a8a8 85%,
+                transparent 100%
+            );
+            margin: 5px 0 25px 0;
+        "></div>
+    """, unsafe_allow_html=True)
     st.header('Register your teacher profile', text_alignment="center")
     st.space()
 
