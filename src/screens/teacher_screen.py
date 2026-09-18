@@ -2,6 +2,7 @@ import streamlit as st
 from src.components.header import header_dashboard
 from src.components.footer import footer_home
 from src.UI.base_layout import style_background_dashboard, style_base_layout
+from src.database.db import check_teacher_exists, create_teacher, teacher_login
 
 
 def teacher_screen():
@@ -9,32 +10,13 @@ def teacher_screen():
     style_background_dashboard()
     style_base_layout()
 
-    if 'teacher_login_type' not in st.session_state or st.session_state.teacher_login_type=="login":
+
+    if "teacher_data" in st.session_state:
+         teacher_dashboard()
+    elif 'teacher_login_type' not in st.session_state or st.session_state.teacher_login_type=="login":
         teacher_screen_login()
     elif st.session_state.teacher_login_type=="register":
         teacher_screen_register()
-
-
-
-
-    # # HEADER ROW
-    # c1, c2 = st.columns(
-    #     [5, 2],
-    #     vertical_alignment="center",
-    #     gap="xlarge"
-    # )
-
-    # with c1:
-    #     header_dashboard()
-
-    # with c2:
-    #     st.button(
-    #         "Go back",
-    #         type="secondary",
-    #         key="loginbackbtn",
-    #         use_container_width=True,
-    #         shortcut="ctrl+b"
-    #     )
 
     # DIVIDER
     st.markdown("""
@@ -52,21 +34,28 @@ def teacher_screen():
         "></div>
     """, unsafe_allow_html=True)
 
-    # # TITLE
-    # st.markdown("""
-    #     <div style="
-    #         color: #202038;
-    #         font-family: 'Titan One', cursive;
-    #         font-size: 30px;
-    #         line-height: 1;
-    #         margin: 0;
-    #         padding: 0;
-    #     ">
-    #         Register your teacher account
-    #     </div>
-    # """, unsafe_allow_html=True)
+ 
 
+def teacher_dashboard():
+    teacher_data = st.session_state.teacher_data
 
+    st.header(f"""Welcome, {teacher_data["name"]}""")
+
+def login_teacher(username, password):
+    if not username or not password:
+          return False
+
+    teacher = teacher_login(username, password)
+
+    if teacher:
+         st.session_state.user_role = "teacher"
+         st.session_state.teacher_data = teacher
+         st.session_state.is_logged_in = True
+         return True
+    
+    return False
+
+     
 
 def teacher_screen_login():
     c1, c2 = st.columns(2, vertical_alignment="center", gap="xxlarge")
@@ -93,11 +82,19 @@ def teacher_screen_login():
 
     btnc1, btnc2=st.columns(2)
     with btnc1:
-        st.button(
+        if st.button(
             "Login",
             icon=':material/passkey:', 
             shortcut='control+enter',
-            width = "stretch")
+            width = "stretch"):
+            if login_teacher(teacher_username, teacher_pass):
+                st.toast("Access granted. Welcome to MarkSpace!")
+                import time
+                time.sleep(1)
+                st.rerun()
+            else:
+                 st.error("Invalid username and password combo")
+
         
 
 
@@ -116,7 +113,21 @@ def teacher_screen_login():
 
 
 
+def register_teacher(teacher_username, teacher_name, teacher_pass, teacher_pass_confirm):
+    if not teacher_username or not teacher_name or not teacher_pass:
+         return False, "All fields are required!"
+    if check_teacher_exists(teacher_username):
+         return False, "Username already taken!"
+    if teacher_pass != teacher_pass_confirm:
+         return False, "Password doesn't match"
 
+    try:
+         create_teacher(teacher_username, teacher_pass, teacher_name)
+         return True, "Sucessfully Created! Login Now"
+    
+    except Exception as e:
+         return False, "Unexpected Error!"
+     
 
 def teacher_screen_register():
     c1, c2 = st.columns(2, vertical_alignment="center", gap="xxlarge")
@@ -146,11 +157,20 @@ def teacher_screen_register():
 
     btnc1, btnc2=st.columns(2)
     with btnc1:
-        st.button(
+        if st.button(
             "Register now",
             icon=':material/passkey:', 
             shortcut='control+enter',
-            width = "stretch")
+            width = "stretch"):
+            success,message = register_teacher(teacher_username, teacher_name, teacher_pass, teacher_pass_confirm)
+            if success:
+                 st.success(message)
+                 import time
+                 time.sleep(2)
+                 st.session_state.teacher_login_type = "login"
+                 st.rerun()
+            else:
+                 st.error(message)
         
 
 
