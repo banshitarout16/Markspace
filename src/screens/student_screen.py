@@ -5,8 +5,13 @@ from src.UI.base_layout import style_background_dashboard, style_base_layout
 from src.database.db import check_teacher_exists, create_teacher, teacher_login
 from PIL import Image
 import numpy as np 
+from src.pipelines.face_pipeline import predict_attendance, get_face_embeddings, train_classifier
+from src.pipelines.voice_pipeline import get_voice_embedding
+from src.database.db import get_all_students, create_student
+import time
 
-
+def student_dashboard():
+    st.header("DASHBOARD HERE")
 
 
 def student_screen():
@@ -14,6 +19,12 @@ def student_screen():
     style_background_dashboard()
     style_base_layout()
 
+
+    if "student_data" in st.session_state:
+          student_dashboard()
+          return
+
+    
     c1, c2 = st.columns(2, vertical_alignment="center", gap="xxlarge")
     with c1:
         header_dashboard()
@@ -50,7 +61,9 @@ def student_screen():
 
     # camera on for face authentication
     
+    show_registration = False
     photo_source = st.camera_input("Position your face in the center")
-    if photo_source:
-          np.array(Image.open(photo_source))
+
+
+
     footer_home()

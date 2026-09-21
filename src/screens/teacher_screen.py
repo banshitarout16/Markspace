@@ -39,7 +39,46 @@ def teacher_screen():
 def teacher_dashboard():
     teacher_data = st.session_state.teacher_data
 
-    st.header(f"""Welcome, {teacher_data["name"]}""")
+    st.subheader(f"""Welcome, {teacher_data["name"]}""")
+    c1, c2 = st.columns(2, vertical_alignment="center", gap="xxlarge")
+    with c1:
+        header_dashboard()
+    with c2:
+       st.subheader(f"""Welcome, {teacher_data["name"]}""")
+       if st.button(
+                   "Logout",
+                   type="secondary",
+                   key="loginbackbtn",
+                   use_container_width=True,
+                   shortcut="ctrl+b"
+                   ):
+                   st.session_state['is_logged_in'] = False
+                   del st.session_state.teacher_data
+                   st.rerun()
+    st.space()
+
+    if "current_teacher_tab" not in st.session_state:
+         st.session_state.current_teacher_tab = "take_attendance"
+    tab1, tab2, tab3 = st.columns(3)
+
+    with tab1:
+         type1 = 'primary' if st.session_state.current_teacher_tab == 'take_attendance' else 'tertiary'
+         if st.button('Take Attendance', type=type1, width = 'stretch', icon = ':material/ar_on_you:'):
+              st.session_state.current_teacher_tab = 'take_attendance'
+              st.rerun()
+    with tab2:
+         type2 = 'primary' if st.session_state.current_teacher_tab == 'manage_subjects' else 'tertiary'
+         if st.button('Manage Subjects', type=type2, width = 'stretch', icon = ':material/book_ribbon:'):
+              st.session_state.current_teacher_tab = 'manage_subjects'
+              st.rerun()
+    with tab3:
+         type3 = 'primary' if st.session_state.current_teacher_tab == 'attendance_records' else 'tertiary'
+         if st.button('Attendance Records', type=type3, width = 'stretch', icon = ':material/cards_stack:'):
+              st.session_state.current_teacher_tab = 'attendance_records'
+              st.rerun()
+
+
+    footer_home()
 
 def login_teacher(username, password):
     if not username or not password:
