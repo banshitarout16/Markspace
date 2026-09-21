@@ -39,7 +39,6 @@ def teacher_screen():
 def teacher_dashboard():
     teacher_data = st.session_state.teacher_data
 
-    st.subheader(f"""Welcome, {teacher_data["name"]}""")
     c1, c2 = st.columns(2, vertical_alignment="center", gap="xxlarge")
     with c1:
         header_dashboard()
@@ -77,8 +76,25 @@ def teacher_dashboard():
               st.session_state.current_teacher_tab = 'attendance_records'
               st.rerun()
 
+    st.divider()
+
+    if st.session_state.current_teacher_tab == 'take_attendance':
+         teacher_tab_take_attendance()
+    if st.session_state.current_teacher_tab == 'manage_subjects':
+         teacher_tab_manage_subjects()
+    if st.session_state.current_teacher_tab == 'attendance_records':
+         teacher_tab_attendance_records()
+
 
     footer_home()
+
+def teacher_tab_take_attendance():
+     st.header(" take attendance")
+def teacher_tab_manage_subjects(): 
+     st.header("manage subject")
+def teacher_tab_attendance_records():
+     st.header("attendance records")
+
 
 def login_teacher(username, password):
     if not username or not password:
