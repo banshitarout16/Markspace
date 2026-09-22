@@ -2,12 +2,16 @@ import streamlit as st
 from src.components.header import header_dashboard
 from src.components.footer import footer_home
 from src.UI.base_layout import style_background_dashboard, style_base_layout
-from src.database.db import check_teacher_exists, create_teacher, teacher_login
+from src.database.db import check_teacher_exists, create_teacher, teacher_login, get_teacher_subjects
+from src.components.dialog_create_subject import create_subject_dialog
+from src.components.subject_card import subject_card
+from src.components.dialog_share_subject import share_subject_dialog
 
 
 def teacher_screen():
 
     style_background_dashboard()
+    
     style_base_layout()
 
 
@@ -40,6 +44,7 @@ def teacher_dashboard():
     teacher_data = st.session_state.teacher_data
 
     c1, c2 = st.columns(2, vertical_alignment="center", gap="xxlarge")
+    
     with c1:
         header_dashboard()
     with c2:
@@ -90,8 +95,50 @@ def teacher_dashboard():
 
 def teacher_tab_take_attendance():
      st.header(" take attendance")
-def teacher_tab_manage_subjects(): 
-     st.header("manage subject")
+
+
+
+def teacher_tab_manage_subjects():
+     teacher_id = st.session_state.teacher_data['teacher_id']
+     col1, col2 = st.columns(2)
+     with col1:
+          st.header('Manage Subjects', width = 'stretch')
+
+     with col2:
+          if st.button('Create New Subjects', width = 'stretch'):
+               create_subject_dialog(teacher_id)
+
+    #List all subjects
+
+     subjects = get_teacher_subjects(teacher_id)
+     if subjects:
+        for sub in subjects:
+
+            people_icon = '''<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>'''
+
+            clock_icon = '''<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'''
+            stats = [
+                  (people_icon, 'students', sub['total_students']),
+                  (clock_icon, 'classes', sub['total_classes']),
+             ]
+        def share_btn():
+            if st.button(f"Share Code: {sub['name']}", key = f"share_{sub['subject_code']}", icon=":material/share:"):
+                  share_subject_dialog(sub['name'], sub['subject_code'])
+
+            st.space()
+
+        subject_card(
+             name = sub['name'],
+             code = sub['subject_code'],
+             section = sub['section'],
+             stats = stats,
+             footer_callback = share_btn
+        )
+     else:
+          st.info("No Subject Found. CREATE ONE ABOVE")
+
+             
+
 def teacher_tab_attendance_records():
      st.header("attendance records")
 
