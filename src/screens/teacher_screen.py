@@ -42,13 +42,23 @@ def teacher_screen():
 
 def teacher_dashboard():
     teacher_data = st.session_state.teacher_data
+    st.markdown(
+        f"""
+        <div style="text-align:center; margin-bottom:25px;">
+            <h2 style="margin:0;">
+                Welcome, {teacher_data["name"]} !
+            </h2>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
     c1, c2 = st.columns(2, vertical_alignment="center", gap="xxlarge")
     
     with c1:
         header_dashboard()
     with c2:
-       st.subheader(f"""Welcome, {teacher_data["name"]}""")
+    #    st.subheader(f"""Welcome, {teacher_data["name"]}""")
        if st.button(
                    "Logout",
                    type="secondary",

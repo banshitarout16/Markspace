@@ -11,7 +11,36 @@ from src.database.db import get_all_students, create_student
 import time
 
 def student_dashboard():
-    st.header("DASHBOARD HERE")
+      student_data = st.session_state.student_data
+      st.markdown(
+        f"""
+        <div style="text-align:center; margin-bottom:25px;">
+            <h2 style="margin:0;">
+                Welcome, {student_data["name"]} !
+            </h2>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+      c1, c2 = st.columns(2, vertical_alignment="center", gap="xxlarge")
+    
+      with c1:
+            header_dashboard()
+      with c2:
+            # st.subheader(f"""Welcome, {student_data["name"]}""")
+            if st.button(
+                        "Logout",
+                        type="secondary",
+                        key="loginbackbtn",
+                        use_container_width=True,
+                        shortcut="ctrl+b"
+                        ):
+                        st.session_state['is_logged_in'] = False
+                        del st.session_state.student_data
+                        st.rerun()
+      st.space()
+
+      footer_home()
 
 
 def student_screen():
