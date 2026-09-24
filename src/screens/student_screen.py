@@ -7,11 +7,14 @@ from PIL import Image
 import numpy as np 
 from src.pipelines.face_pipeline import predict_attendance, get_face_embeddings, train_classifier
 from src.pipelines.voice_pipeline import get_voice_embedding
-from src.database.db import get_all_students, create_student
+from src.database.db import get_all_students, create_student, get_student_subjects, get_student_attendance, unenroll_student_to_subject
 import time
+from src.components.dialog_enroll import enroll_dialog
+from src.components.subject_card import subject_card
 
 def student_dashboard():
       student_data = st.session_state.student_data
+      student_id = student_data['student_id']
       st.markdown(
         f"""
         <div style="text-align:center; margin-bottom:25px;">
@@ -39,6 +42,79 @@ def student_dashboard():
                         del st.session_state.student_data
                         st.rerun()
       st.space()
+
+      c1, c2 =st.columns(2)
+      with c1:
+            st.header('Your Enrolled Subjects')
+      with c2:
+            if st.button('Enroll in Subject', type='primary', width='stretch'):
+                  enroll_dialog()
+
+
+      st.divider()
+
+
+      with st.spinner('Loading your enrolled subjects..'):
+            subjects = get_student_subjects(student_id)
+            logs = get_student_attendance(student_id)
+
+      stats_map = {}
+
+      for log in logs:
+            sid = log['subject_id']
+
+            if sid not in stats_map:
+                  stats_map[sid] = {"total":0, "attended": 0}
+
+            stats_map[sid]['total'] +=1
+
+            if log.get('is_present'):
+                  stats_map[sid]['attended'] += 1
+
+
+      cols = st.columns(2)
+      for i, sub_node in enumerate(subjects):
+            sub = sub_node['subjects']
+            sid = sub['subject_id']
+
+
+            stats = stats_map.get(sid,{"total":0, "attended": 0} )
+            def unenroll_button():
+                  if st.button("Unenroll from this course", type='tertiary', width='stretch', icon=':material/delete_forever:'):
+                        unenroll_student_to_subject(student_id, sid)
+                        st.toast(f'Unenrolled from {sub['name']} successfully!')
+                        st.rerun()
+
+
+            calendar_icon = '''<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>'''
+
+            check_icon = '''<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="9 12 11 14 15 10"/>
+                        </svg>'''
+
+                  
+            with cols[i % 2]:
+
+                  subject_card(
+                  name = sub['name'],
+                  code =sub['subject_code'],
+                  section = sub['section'],
+
+
+
+                  stats = [
+                  (calendar_icon, 'Total', stats['total']),
+                  (check_icon, 'Attended', stats['attended']),
+                  ],
+                  
+                  footer_callback=unenroll_button
+            )
 
       footer_home()
 
