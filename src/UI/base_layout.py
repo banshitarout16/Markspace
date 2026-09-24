@@ -44,12 +44,12 @@ def style_base_layout():
         @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Teko:wght@300..700&family=Titan+One&display=swap');
 
 
-        # #MainMenu, Footer, Header{
-        #     visibility: hidden;
-        # }
-        # .block-container{
-        #     padding-top: 1.5rem !important;
-        # }
+        #MainMenu, Footer, Header{
+            visibility: hidden;
+        }
+        .block-container{
+            padding-top: 1.5rem !important;
+        }
         h1{
             font-family: 'Titan One', cursive !important;
             font-size: 3.5rem !important;
