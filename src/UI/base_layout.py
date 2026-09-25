@@ -8,10 +8,21 @@ def style_background_home():
         .stApp{ 
         background: #5865F2 !important; 
         }
+
         .stApp div[data-testid="stColumn"]{
             background-color: #FFFFFF !important;
-            padding: 2.5rem !important;
-            border-radius: 5rem !important;
+            padding: 1.8rem 2.5rem !important;
+            border-radius: 2.5rem !important;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+            transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+            }
+        .stApp div[data-testid="stColumn"]:hover{
+            transform: translateY(-6px) !important;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.2) !important;
+            }
+
+        .stApp button[kind="primary"]{
+            background: linear-gradient(135deg, #4338CA, #7C3AED) !important;
             }
 
         </style>
