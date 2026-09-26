@@ -8,10 +8,13 @@ def style_background_home():
         .stApp{ 
         background: #5865F2 !important; 
         }
+        .stApp .block-container{
+            max-width: 860px !important;
+        }
 
         .stApp div[data-testid="stColumn"]{
             background-color: #FFFFFF !important;
-            padding: 1.8rem 2.5rem !important;
+            padding: 1.6rem 2.5rem !important;
             border-radius: 2.5rem !important;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
             transition: transform 0.25s ease, box-shadow 0.25s ease !important;
