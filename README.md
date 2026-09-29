@@ -1,6 +1,8 @@
-# MarkSpace
+# MarkSpace - **The smarter way to show up.**
 
-**The smarter way to show up.**
+![MarkSpace Landing Page](./docs/ms_landingpage.png)
+
+**[Visit Website](https:)** — one click away, with every tutorial and walkthrough you need before logging in.
 
 ## The problem
 
