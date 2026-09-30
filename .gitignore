@@ -44,7 +44,3 @@ htmlcov/
 # Temporary files
 *.tmp
 *.tempS
-
-#streamlit
-.streamlit
-.streamlit/secrets.toml
