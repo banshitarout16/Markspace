@@ -127,9 +127,9 @@ h4 {
 }
 
 .hero h1 {
-    font-size: 5rem;
+    font-size: 3rem;
     color: var(--text-dark);
-    max-width: 1000px;
+    max-width: 900px;
     margin-bottom: 24px;
     line-height: 1.0;
 }
