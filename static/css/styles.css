@@ -139,9 +139,9 @@ h4 {
 }
 
 .hero p {
-    font-size: 1.25rem;
+    font-size: 1rem;
     color: var(--text-muted);
-    max-width: 650px;
+    max-width: 580px;
     margin-bottom: 56px;
     font-weight: 400;
 }
